@@ -29,7 +29,7 @@ class LessonsController extends ApiController
         $lessons = Lesson::all();
 
         return $this->respond([
-            'data' => $this->lessonTransformer->transformCollection($lessons->toArray()),
+            'data' => $this->lessonTransformer->transformCollection($lessons->all()),
         ]);
     }
 
