@@ -7,7 +7,7 @@ use App\Lesson;
 use Illuminate\Http\Request;
 use App\Transformers\LessonTransformer;
 
-class LessonsController extends Controller
+class LessonsController extends ApiController
 {
     function __construct(LessonTransformer $lessonTransformer)
     {
@@ -25,10 +25,12 @@ class LessonsController extends Controller
         // 2. No way to attach meta data
         // 3. Linking db structure to the API output
         // 4. No way to signal headers/responses codes
+
         $lessons = Lesson::all();
-        return Response::json([
+
+        return $this->respond([
             'data' => $this->lessonTransformer->transformCollection($lessons->toArray()),
-        ], 200);
+        ]);
     }
 
     /**
@@ -62,15 +64,12 @@ class LessonsController extends Controller
     {
         $lesson = Lesson::find($id);
         if(!$lesson) {
-            return Response::json([
-                'error' => [
-                    'message' => 'Lesson does not exist',
-                ]
-            ], 404);
+            return $this->respondNotFound('Lesson does not exist.');
         }
-        return Response::json([
+
+        return $this->respond([
             'data' => $this->lessonTransformer->transform($lesson)
-        ], 200);
+        ]);
     }
 
     /**
