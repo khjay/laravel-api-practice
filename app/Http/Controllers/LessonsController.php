@@ -51,7 +51,14 @@ class LessonsController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        if (!$request->has('title') || !$request->has('body') ) {
+            return $this->setStatusCode(422)
+                        ->respondWithError('Parameters failed validation for a lesson.');
+        }
+
+        Lesson::create($request->all());
+
+        return $this->respondCreated('Lesson successfully created.');
     }
 
     /**
